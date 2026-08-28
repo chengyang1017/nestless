@@ -1,5 +1,6 @@
 library nestless_flutter;
 
+export 'src/extensions/stream_extensions.dart';
 export 'src/extensions/widget_list_extensions.dart';
 export 'src/extensions/widget_modifiers.dart';
 export 'src/layouts/n_box.dart';
