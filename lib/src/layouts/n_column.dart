@@ -86,7 +86,6 @@ extension NestlessColumnExtensions on Iterable<Widget> {
     Clip clipBehavior = Clip.none,
   }) {
     return NColumn(
-      children: toList(growable: false),
       gap: gap,
       width: width,
       height: height,
@@ -102,6 +101,7 @@ extension NestlessColumnExtensions on Iterable<Widget> {
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
       clipBehavior: clipBehavior,
+      children: toList(growable: false),
     );
   }
 }
