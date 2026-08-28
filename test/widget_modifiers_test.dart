@@ -85,4 +85,15 @@ void main() {
     expect(tooltip.message, 'More information');
     expect(find.text('Info'), findsOneWidget);
   });
+  testWidgets('nSafeArea wraps widget with SafeArea', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: const Text('Content').nSafeArea(),
+      ),
+    );
+
+    expect(find.byType(SafeArea), findsOneWidget);
+    expect(find.text('Content'), findsOneWidget);
+  });
 }

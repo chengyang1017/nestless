@@ -198,6 +198,25 @@ extension NestlessWidgetModifiers on Widget {
     );
   }
 
+  Widget nSafeArea({
+    bool left = true,
+    bool top = true,
+    bool right = true,
+    bool bottom = true,
+    EdgeInsets minimum = EdgeInsets.zero,
+    bool maintainBottomViewPadding = false,
+  }) {
+    return SafeArea(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+      minimum: minimum,
+      maintainBottomViewPadding: maintainBottomViewPadding,
+      child: this,
+    );
+  }
+
   Widget nSafeAreaIf(
     bool enabled, {
     bool left = true,
