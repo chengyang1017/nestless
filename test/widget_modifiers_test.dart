@@ -96,4 +96,21 @@ void main() {
     expect(find.byType(SafeArea), findsOneWidget);
     expect(find.text('Content'), findsOneWidget);
   });
+
+  testWidgets('nHero wraps widget with Hero', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: const Text('Avatar').nHero('user-1'),
+        ),
+      ),
+    );
+
+    final hero = tester.widget<Hero>(
+      find.byType(Hero),
+    );
+
+    expect(hero.tag, 'user-1');
+    expect(find.text('Avatar'), findsOneWidget);
+  });
 }

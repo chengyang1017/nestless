@@ -331,4 +331,21 @@ extension NestlessWidgetModifiers on Widget {
       child: this,
     );
   }
+
+  Widget nHero(
+    Object tag, {
+    CreateRectTween? createRectTween,
+    HeroFlightShuttleBuilder? flightShuttleBuilder,
+    HeroPlaceholderBuilder? placeholderBuilder,
+    bool transitionOnUserGestures = false,
+  }) {
+    return Hero(
+      tag: tag,
+      createRectTween: createRectTween,
+      flightShuttleBuilder: flightShuttleBuilder,
+      placeholderBuilder: placeholderBuilder,
+      transitionOnUserGestures: transitionOnUserGestures,
+      child: this,
+    );
+  }
 }
