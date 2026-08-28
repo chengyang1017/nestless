@@ -66,3 +66,42 @@ class NColumn extends StatelessWidget {
     );
   }
 }
+
+extension NestlessColumnExtensions on Iterable<Widget> {
+  Widget nColumn({
+    double gap = 0,
+    double? width,
+    double? height,
+    BoxConstraints? constraints,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
+    AlignmentGeometry? alignment,
+    Decoration? decoration,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.min,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.stretch,
+    TextDirection? textDirection,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    Clip clipBehavior = Clip.none,
+  }) {
+    return NColumn(
+      children: toList(growable: false),
+      gap: gap,
+      width: width,
+      height: height,
+      constraints: constraints,
+      padding: padding,
+      margin: margin,
+      alignment: alignment,
+      decoration: decoration,
+      mainAxisAlignment: mainAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      crossAxisAlignment: crossAxisAlignment,
+      textDirection: textDirection,
+      verticalDirection: verticalDirection,
+      textBaseline: textBaseline,
+      clipBehavior: clipBehavior,
+    );
+  }
+}

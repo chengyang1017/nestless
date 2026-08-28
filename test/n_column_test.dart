@@ -35,4 +35,27 @@ void main() {
 
     expect(find.byType(SizedBox), findsNothing);
   });
+
+  testWidgets('nColumn builds NColumn from widget iterable', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: [
+          const Text('A'),
+          const Text('B'),
+          const Text('C'),
+        ].nColumn(
+          gap: 12,
+        ),
+      ),
+    );
+
+    expect(find.byType(NColumn), findsOneWidget);
+    expect(find.byType(Column), findsOneWidget);
+    expect(find.byType(SizedBox), findsNWidgets(2));
+
+    expect(find.text('A'), findsOneWidget);
+    expect(find.text('B'), findsOneWidget);
+    expect(find.text('C'), findsOneWidget);
+  });
 }
