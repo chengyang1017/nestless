@@ -28,4 +28,36 @@ extension NestlessListExtensions<T> on Iterable<T> {
       },
     );
   }
+
+  Widget nSeparated({
+    required Widget Function(T item) item,
+    required Widget separator,
+    Widget empty = const SizedBox.shrink(),
+    EdgeInsetsGeometry? padding,
+    ScrollController? controller,
+    ScrollPhysics? physics,
+    bool shrinkWrap = false,
+    bool reverse = false,
+  }) {
+    final items = toList(growable: false);
+
+    if (items.isEmpty) {
+      return empty;
+    }
+
+    return ListView.separated(
+      controller: controller,
+      physics: physics,
+      padding: padding,
+      shrinkWrap: shrinkWrap,
+      reverse: reverse,
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return item(items[index]);
+      },
+      separatorBuilder: (context, index) {
+        return separator;
+      },
+    );
+  }
 }
