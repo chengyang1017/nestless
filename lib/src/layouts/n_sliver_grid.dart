@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 class NSliverGrid extends StatelessWidget {
-  final List<Widget> children;
+  final List<Widget>? children;
+  final NullableIndexedWidgetBuilder? itemBuilder;
+  final int? itemCount;
   final int columns;
   final double gap;
   final double? rowGap;
@@ -11,17 +13,39 @@ class NSliverGrid extends StatelessWidget {
 
   const NSliverGrid({
     super.key,
-    required this.children,
+    required List<Widget> children,
     required this.columns,
     this.gap = 0,
     this.rowGap,
     this.padding,
     this.childAspectRatio = 1,
     this.mainAxisExtent,
-  }) : assert(columns > 0, 'columns must be greater than 0'),
-       assert(gap >= 0, 'gap must not be negative'),
-       assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
-       assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+  })  : children = children,
+        itemBuilder = null,
+        itemCount = null,
+        assert(columns > 0, 'columns must be greater than 0'),
+        assert(gap >= 0, 'gap must not be negative'),
+        assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
+        assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+
+  const NSliverGrid.builder({
+    super.key,
+    required NullableIndexedWidgetBuilder itemBuilder,
+    required int itemCount,
+    required this.columns,
+    this.gap = 0,
+    this.rowGap,
+    this.padding,
+    this.childAspectRatio = 1,
+    this.mainAxisExtent,
+  })  : children = null,
+        itemBuilder = itemBuilder,
+        itemCount = itemCount,
+        assert(itemCount >= 0, 'itemCount must not be negative'),
+        assert(columns > 0, 'columns must be greater than 0'),
+        assert(gap >= 0, 'gap must not be negative'),
+        assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
+        assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +57,12 @@ class NSliverGrid extends StatelessWidget {
         childAspectRatio: childAspectRatio,
         mainAxisExtent: mainAxisExtent,
       ),
-      delegate: SliverChildListDelegate(children),
+      delegate: itemBuilder != null
+          ? SliverChildBuilderDelegate(
+              itemBuilder!,
+              childCount: itemCount,
+            )
+          : SliverChildListDelegate(children!),
     );
 
     if (padding == null) {
