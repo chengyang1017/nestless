@@ -1,5 +1,6 @@
 export 'src/extensions/value_listenable_extensions.dart';
 export 'src/extensions/context_navigation_extensions.dart';
+export 'src/extensions/context_responsive_extensions.dart';
 export 'src/extensions/future_extensions.dart';
 export 'src/extensions/list_extensions.dart';
 export 'src/extensions/stream_extensions.dart';
@@ -8,9 +9,11 @@ export 'src/extensions/widget_modifiers.dart';
 export 'src/layouts/n_box.dart';
 export 'src/layouts/n_column.dart';
 export 'src/layouts/n_grid.dart';
+export 'src/layouts/n_responsive.dart';
 export 'src/layouts/n_responsive_grid.dart';
 export 'src/layouts/n_row.dart';
 export 'src/layouts/n_scroll_column.dart';
 export 'src/layouts/n_scroll_row.dart';
 export 'src/layouts/n_stack.dart';
 export 'src/layouts/n_wrap.dart';
+export 'src/responsive/n_breakpoint.dart';
