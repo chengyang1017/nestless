@@ -143,6 +143,44 @@ cards.nResponsiveGrid(
 );
 ```
 
+## Responsive layout switching
+
+Use `NResponsive` when the layout structure itself should change by width:
+
+```dart
+NResponsive(
+  mobile: mobileLayout,
+  tablet: tabletLayout,
+  desktop: desktopLayout,
+);
+```
+
+The default breakpoints are mobile below 600, tablet from 600 to 1023, and
+desktop from 1024 upward. They can be customized:
+
+```dart
+NResponsive(
+  breakpoints: const NBreakpoints(
+    tablet: 720,
+    desktop: 1200,
+  ),
+  mobile: mobileLayout,
+  tablet: tabletLayout,
+  desktop: desktopLayout,
+);
+```
+
+For local decisions inside an existing widget tree, use the `BuildContext`
+extensions:
+
+```dart
+context.nBreakpoint();
+context.nIsMobile;
+context.nIsTablet;
+context.nIsDesktop;
+context.nWidth;
+```
+
 ## Short modifier chains
 
 Use modifiers for one to three simple wrappers:
