@@ -58,4 +58,67 @@ void main() {
 
     expect(delegate.crossAxisCount, 4);
   });
+
+  testWidgets('NResponsiveGrid.builder derives columns and builds lazily', (tester) async {
+    var builtCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 700,
+            height: 300,
+            child: NResponsiveGrid.builder(
+              minItemWidth: 200,
+              gap: 16,
+              itemCount: 100,
+              itemBuilder: (context, index) {
+                builtCount++;
+                return SizedBox(
+                  height: 100,
+                  child: Text('Item $index'),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final grid = tester.widget<GridView>(find.byType(GridView));
+    final delegate = grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
+
+    expect(delegate.crossAxisCount, 3);
+    expect(builtCount, lessThan(100));
+    expect(find.text('Item 0'), findsOneWidget);
+  });
+
+  testWidgets('NResponsiveGrid.builder respects maxColumns and padding', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 1200,
+            height: 400,
+            child: NResponsiveGrid.builder(
+              minItemWidth: 180,
+              maxColumns: 4,
+              gap: 12,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              itemCount: 20,
+              itemBuilder: (context, index) {
+                return Text('Product $index');
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final grid = tester.widget<GridView>(find.byType(GridView));
+    final delegate = grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
+
+    expect(delegate.crossAxisCount, 4);
+    expect(grid.padding, const EdgeInsets.symmetric(horizontal: 24));
+  });
 }
