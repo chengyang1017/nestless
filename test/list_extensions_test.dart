@@ -39,7 +39,6 @@ void main() {
     );
 
     expect(find.byType(ListView), findsOneWidget);
-
     expect(find.text('A'), findsOneWidget);
     expect(find.text('B'), findsOneWidget);
     expect(find.text('C'), findsOneWidget);
@@ -92,11 +91,7 @@ void main() {
     expect(find.text('A'), findsOneWidget);
     expect(find.text('B'), findsOneWidget);
     expect(find.text('C'), findsOneWidget);
-
-    expect(
-      find.byType(SizedBox),
-      findsNWidgets(2),
-    );
+    expect(find.byType(SizedBox), findsNWidgets(2));
   });
 
   testWidgets('nSeparated renders empty widget when iterable is empty', (
@@ -117,14 +112,72 @@ void main() {
       ),
     );
 
-    expect(
-      find.text('Nothing here'),
-      findsOneWidget,
+    expect(find.text('Nothing here'), findsOneWidget);
+    expect(find.byType(ListView), findsNothing);
+  });
+
+  testWidgets('nListBuilder lazily builds only visible items', (tester) async {
+    var buildCount = 0;
+
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: SizedBox(
+          height: 200,
+          child: nListBuilder(
+            itemCount: 100,
+            itemBuilder: (context, index) {
+              buildCount++;
+              return SizedBox(
+                height: 80,
+                child: Text('Item $index'),
+              );
+            },
+          ),
+        ),
+      ),
     );
 
-    expect(
-      find.byType(ListView),
-      findsNothing,
+    expect(find.byType(ListView), findsOneWidget);
+    expect(buildCount, lessThan(100));
+    expect(find.text('Item 0'), findsOneWidget);
+  });
+
+  testWidgets('nListBuilder renders empty widget for zero items', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: nListBuilder(
+          itemCount: 0,
+          empty: const Text('Empty builder'),
+          itemBuilder: (context, index) => Text('Item $index'),
+        ),
+      ),
     );
+
+    expect(find.text('Empty builder'), findsOneWidget);
+    expect(find.byType(ListView), findsNothing);
+  });
+
+  testWidgets('nSeparatedBuilder builds indexed separators', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: SizedBox(
+          height: 400,
+          child: nSeparatedBuilder(
+            itemCount: 3,
+            itemBuilder: (context, index) => Text('Item $index'),
+            separatorBuilder: (context, index) => Text('Separator $index'),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Item 0'), findsOneWidget);
+    expect(find.text('Item 1'), findsOneWidget);
+    expect(find.text('Item 2'), findsOneWidget);
+    expect(find.text('Separator 0'), findsOneWidget);
+    expect(find.text('Separator 1'), findsOneWidget);
   });
 }
