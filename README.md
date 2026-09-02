@@ -122,6 +122,27 @@ cards.nGrid(
 );
 ```
 
+For responsive grids, provide a minimum item width instead of breakpoints:
+
+```dart
+NResponsiveGrid(
+  minItemWidth: 220,
+  maxColumns: 5,
+  gap: 16,
+  children: cards,
+);
+```
+
+The number of columns is derived from the available width. The same API is
+available on iterables:
+
+```dart
+cards.nResponsiveGrid(
+  minItemWidth: 220,
+  gap: 16,
+);
+```
+
 ## Short modifier chains
 
 Use modifiers for one to three simple wrappers:
