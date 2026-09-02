@@ -99,4 +99,76 @@ void main() {
     expect(find.text('One'), findsOneWidget);
     expect(find.text('Two'), findsOneWidget);
   });
+
+  testWidgets('builder keeps responsive columns and lazily builds items', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(700, 320);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    var builtCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CustomScrollView(
+          slivers: [
+            NSliverResponsiveGrid.builder(
+              minItemWidth: 200,
+              gap: 16,
+              itemCount: 100,
+              itemBuilder: (context, index) {
+                builtCount++;
+                return SizedBox(
+                  height: 120,
+                  child: Text('Item $index'),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final grid = tester.widget<SliverGrid>(find.byType(SliverGrid));
+    final delegate =
+        grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
+
+    expect(delegate.crossAxisCount, 3);
+    expect(builtCount, lessThan(100));
+    expect(find.text('Item 0'), findsOneWidget);
+  });
+
+  testWidgets('builder respects maxColumns and padding', (tester) async {
+    tester.view.physicalSize = const Size(1200, 500);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CustomScrollView(
+          slivers: [
+            NSliverResponsiveGrid.builder(
+              minItemWidth: 180,
+              maxColumns: 4,
+              gap: 12,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              itemCount: 20,
+              itemBuilder: (context, index) => Text('Item $index'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(find.byType(SliverPadding), findsOneWidget);
+
+    final grid = tester.widget<SliverGrid>(find.byType(SliverGrid));
+    final delegate =
+        grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
+
+    expect(delegate.crossAxisCount, 4);
+  });
 }
