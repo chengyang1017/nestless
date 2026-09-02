@@ -52,6 +52,46 @@ class NGrid extends StatelessWidget {
   }
 }
 
+Widget nGridBuilder({
+  required int columns,
+  required int itemCount,
+  required NullableIndexedWidgetBuilder itemBuilder,
+  double gap = 0,
+  double? rowGap,
+  EdgeInsetsGeometry? padding,
+  double childAspectRatio = 1,
+  double? mainAxisExtent,
+  bool shrinkWrap = false,
+  ScrollPhysics? physics,
+  ScrollController? controller,
+  bool primary = false,
+  bool reverse = false,
+}) {
+  assert(columns > 0, 'columns must be greater than 0');
+  assert(itemCount >= 0, 'itemCount must not be negative');
+  assert(gap >= 0, 'gap must not be negative');
+  assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative');
+  assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+
+  return GridView.builder(
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: columns,
+      crossAxisSpacing: gap,
+      mainAxisSpacing: rowGap ?? gap,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+    ),
+    itemCount: itemCount,
+    itemBuilder: itemBuilder,
+    padding: padding,
+    shrinkWrap: shrinkWrap,
+    physics: physics,
+    controller: controller,
+    primary: primary,
+    reverse: reverse,
+  );
+}
+
 extension NestlessGridExtensions on Iterable<Widget> {
   Widget nGrid({
     required int columns,
