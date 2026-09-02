@@ -149,6 +149,91 @@ Flutter wrappers.
 The `NColumn`, `NRow`, and `NGrid` widget classes remain available for
 compatibility, but new code should prefer the extension-first form.
 
+## Scrolling by composition
+
+When scrolling is just another Flutter wrapper, compose it instead of creating
+a second layout vocabulary.
+
+```dart
+[
+  const Text(
+    'Settings',
+    style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  const Text('Account'),
+  const Text('Privacy'),
+  const Text('Notifications'),
+  FilledButton(
+    onPressed: save,
+    child: const Text('Save changes'),
+  ),
+]
+    .nColumn(
+      gap: 16,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    )
+    .nPadAll(24)
+    .nScrollY()
+    .nWidth(480);
+```
+
+That produces normal Flutter widgets:
+
+```text
+SizedBox
+└── SingleChildScrollView
+    └── Padding
+        └── Column
+```
+
+Horizontal scrolling works the same way:
+
+```dart
+[
+  const Chip(label: Text('Flutter')),
+  const Chip(label: Text('Dart')),
+  const Chip(label: Text('Firebase')),
+  const Chip(label: Text('PostgreSQL')),
+]
+    .nRow(gap: 8)
+    .nScrollX();
+```
+
+`NScrollColumn` and `NScrollRow` remain available as compatibility widgets,
+but internally they now compose the same extension-first primitives.
+
+## Box and wrapper modifiers
+
+For ordinary wrapper behavior, prefer modifiers over a dedicated box class:
+
+```dart
+const Text('Error')
+    .nAlign(Alignment.centerLeft)
+    .nPadAll(16)
+    .nWidth(480);
+```
+
+For several container-style properties at once, use `nBox()`:
+
+```dart
+const Text('Premium')
+    .nBox(
+      width: 320,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+    );
+```
+
+`nBox()` directly returns Flutter's `Container` when a wrapper is needed.
+`NBox` remains available for compatibility.
+
 ## Responsive grid
 
 Use `NResponsiveGrid` when Nestless adds behavior that Flutter does not expose
@@ -290,7 +375,9 @@ Iterable<Widget> -> nColumn() -> Column
 Iterable<Widget> -> nRow()    -> Row
 Iterable<Widget> -> nGrid()   -> GridView
 Widget           -> nPadAll() -> Padding
+Widget           -> nScrollY()-> SingleChildScrollView
 Widget           -> nWidth()  -> SizedBox
+Widget           -> nBox()    -> Container
 ```
 
 Keep dedicated Nestless widgets for behavior that adds a higher-level concept,
