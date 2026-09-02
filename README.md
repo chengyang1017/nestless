@@ -2,7 +2,7 @@
 
 Keep common Flutter UI code shallow and readable.
 
-`nestless_flutter` does not replace Flutter's Widget tree. Its preferred API
+`nestless_flutter` does not replace Flutter's widget tree. Its preferred API
 adds concise composition helpers around normal Flutter widgets so the runtime
 tree remains familiar in Flutter Inspector and DevTools.
 
@@ -66,7 +66,7 @@ return [
     .nWidth(480);
 ```
 
-The extension form above directly creates Flutter's `Column`, `Padding`, and
+The extension form directly creates Flutter's `Column`, `Padding`, and
 `SizedBox`. It does not add an `NColumn` wrapper to the runtime tree.
 
 ## Local installation
@@ -85,7 +85,8 @@ import 'package:nestless_flutter/nestless_flutter.dart';
 
 ## Extension-first layouts
 
-Use iterable extensions when Flutter already has the underlying layout widget.
+Use iterable extensions when Flutter already owns the underlying layout
+concept.
 
 ### Column
 
@@ -146,7 +147,51 @@ Flutter wrappers.
 
 `nGrid()` directly returns Flutter's `GridView`.
 
-The `NColumn`, `NRow`, and `NGrid` widget classes remain available for
+### Stack
+
+```dart
+<Widget>[
+  Image.network(
+    imageUrl,
+    fit: BoxFit.cover,
+  ),
+  const Text(
+    'NEW',
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+    ),
+  ).nPositioned(
+    top: 12,
+    right: 12,
+  ),
+].nStack(
+  width: 320,
+  height: 180,
+  clipBehavior: Clip.antiAlias,
+);
+```
+
+`nStack()` directly returns Flutter's `Stack`. Positioning can stay in the
+normal modifier chain with `nPositioned()`.
+
+### Wrap
+
+```dart
+<Widget>[
+  const Chip(label: Text('Flutter')),
+  const Chip(label: Text('Dart')),
+  const Chip(label: Text('Firebase')),
+  const Chip(label: Text('PostgreSQL')),
+  const Chip(label: Text('Nestless')),
+].nWrap(
+  spacing: 8,
+  runSpacing: 8,
+);
+```
+
+`nWrap()` directly returns Flutter's `Wrap`.
+
+`NColumn`, `NRow`, `NGrid`, `NStack`, and `NWrap` remain available for
 compatibility, but new code should prefer the extension-first form.
 
 ## Scrolling by composition
@@ -192,7 +237,7 @@ SizedBox
 Horizontal scrolling works the same way:
 
 ```dart
-[
+<Widget>[
   const Chip(label: Text('Flutter')),
   const Chip(label: Text('Dart')),
   const Chip(label: Text('Firebase')),
@@ -203,7 +248,7 @@ Horizontal scrolling works the same way:
 ```
 
 `NScrollColumn` and `NScrollRow` remain available as compatibility widgets,
-but internally they now compose the same extension-first primitives.
+but internally they compose the same extension-first primitives.
 
 ## Box and wrapper modifiers
 
@@ -219,16 +264,17 @@ const Text('Error')
 For several container-style properties at once, use `nBox()`:
 
 ```dart
-const Text('Premium')
-    .nBox(
-      width: 320,
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 12),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-    );
+const Text('Premium').nBox(
+  width: 320,
+  padding: const EdgeInsets.all(16),
+  margin: const EdgeInsets.only(bottom: 12),
+  alignment: Alignment.center,
+  decoration: const BoxDecoration(
+    borderRadius: BorderRadius.all(
+      Radius.circular(16),
+    ),
+  ),
+);
 ```
 
 `nBox()` directly returns Flutter's `Container` when a wrapper is needed.
@@ -269,7 +315,7 @@ Flutter sliver boilerplate.
 ```dart
 CustomScrollView(
   slivers: [
-    [
+    <Widget>[
       const Text('Overview'),
       const Text('Recent activity'),
       FilledButton(
@@ -374,6 +420,8 @@ Prefer extension-first APIs when Flutter already owns the concept:
 Iterable<Widget> -> nColumn() -> Column
 Iterable<Widget> -> nRow()    -> Row
 Iterable<Widget> -> nGrid()   -> GridView
+Iterable<Widget> -> nStack()  -> Stack
+Iterable<Widget> -> nWrap()   -> Wrap
 Widget           -> nPadAll() -> Padding
 Widget           -> nScrollY()-> SingleChildScrollView
 Widget           -> nWidth()  -> SizedBox
