@@ -41,7 +41,7 @@ class NRow extends StatelessWidget {
     this.verticalDirection = VerticalDirection.down,
     this.textBaseline,
     this.clipBehavior = Clip.none,
-  });
+  }) : assert(gap >= 0, 'gap must not be negative');
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +87,8 @@ extension NestlessRowExtensions on Iterable<Widget> {
     TextBaseline? textBaseline,
     Clip clipBehavior = Clip.none,
   }) {
+    assert(gap >= 0, 'gap must not be negative');
+
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       mainAxisSize: mainAxisSize,
