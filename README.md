@@ -143,6 +143,41 @@ cards.nResponsiveGrid(
 );
 ```
 
+## Sliver layouts
+
+Use `NSliverColumn` directly inside `CustomScrollView.slivers` when the page
+needs normal Flutter sliver behavior without the usual `SliverPadding` and
+`SliverChildListDelegate` boilerplate:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverColumn(
+      gap: 12,
+      padding: const EdgeInsets.all(16),
+      children: [
+        title,
+        content,
+        button,
+      ],
+    ),
+  ],
+);
+```
+
+The iterable extension is available too:
+
+```dart
+CustomScrollView(
+  slivers: [
+    children.nSliverColumn(
+      gap: 12,
+      padding: const EdgeInsets.all(16),
+    ),
+  ],
+);
+```
+
 ## Responsive layout switching
 
 Use `NResponsive` when the layout structure itself should change by width:
