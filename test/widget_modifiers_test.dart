@@ -18,6 +18,23 @@ void main() {
     expect(find.text('Content'), findsOneWidget);
   });
 
+  testWidgets('no-op size and padding modifiers avoid wrappers', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: const Text('Content')
+            .nSize()
+            .nPadAll(0)
+            .nPadSymmetric()
+            .nPadOnly(),
+      ),
+    );
+
+    expect(find.byType(SizedBox), findsNothing);
+    expect(find.byType(Padding), findsNothing);
+    expect(find.text('Content'), findsOneWidget);
+  });
+
   testWidgets('nIf applies transform conditionally', (tester) async {
     await tester.pumpWidget(
       Directionality(
@@ -48,6 +65,18 @@ void main() {
     );
 
     expect(opacity.opacity, 0.5);
+    expect(find.text('Hello'), findsOneWidget);
+  });
+
+  testWidgets('nOpacity avoids wrapper for fully opaque widgets', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: const Text('Hello').nOpacity(1),
+      ),
+    );
+
+    expect(find.byType(Opacity), findsNothing);
     expect(find.text('Hello'), findsOneWidget);
   });
 
@@ -85,6 +114,7 @@ void main() {
     expect(tooltip.message, 'More information');
     expect(find.text('Info'), findsOneWidget);
   });
+
   testWidgets('nSafeArea wraps widget with SafeArea', (tester) async {
     await tester.pumpWidget(
       Directionality(
@@ -94,6 +124,19 @@ void main() {
     );
 
     expect(find.byType(SafeArea), findsOneWidget);
+    expect(find.text('Content'), findsOneWidget);
+  });
+
+  testWidgets('nSafeAreaIf reuses SafeArea behavior when enabled', (tester) async {
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: const Text('Content').nSafeAreaIf(true, top: false),
+      ),
+    );
+
+    final safeArea = tester.widget<SafeArea>(find.byType(SafeArea));
+    expect(safeArea.top, isFalse);
     expect(find.text('Content'), findsOneWidget);
   });
 
@@ -112,5 +155,14 @@ void main() {
 
     expect(hero.tag, 'user-1');
     expect(find.text('Avatar'), findsOneWidget);
+  });
+
+  test('modifier validation rejects invalid values', () {
+    expect(() => const Text('A').nPadAll(-1), throwsAssertionError);
+    expect(() => const Text('A').nExpanded(flex: 0), throwsAssertionError);
+    expect(() => const Text('A').nFlexible(flex: 0), throwsAssertionError);
+    expect(() => const Text('A').nOpacity(1.1), throwsAssertionError);
+    expect(() => const Text('A').nAspectRatio(0), throwsAssertionError);
+    expect(() => const Text('A').nMaxWidth(-1), throwsAssertionError);
   });
 }
