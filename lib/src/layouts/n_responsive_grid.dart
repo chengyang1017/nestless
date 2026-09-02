@@ -2,8 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'n_grid.dart';
-
 class NResponsiveGrid extends StatelessWidget {
   final List<Widget>? children;
   final NullableIndexedWidgetBuilder? itemBuilder;
@@ -47,8 +45,8 @@ class NResponsiveGrid extends StatelessWidget {
 
   const NResponsiveGrid.builder({
     super.key,
-    required NullableIndexedWidgetBuilder itemBuilder,
     required int itemCount,
+    required NullableIndexedWidgetBuilder itemBuilder,
     required this.minItemWidth,
     this.maxColumns,
     this.gap = 0,
@@ -91,17 +89,19 @@ class NResponsiveGrid extends StatelessWidget {
           columns = math.min(columns, maxColumns!);
         }
 
+        final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns,
+          crossAxisSpacing: gap,
+          mainAxisSpacing: rowGap ?? gap,
+          childAspectRatio: childAspectRatio,
+          mainAxisExtent: mainAxisExtent,
+        );
+
         if (itemBuilder != null) {
           return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              crossAxisSpacing: gap,
-              mainAxisSpacing: rowGap ?? gap,
-              childAspectRatio: childAspectRatio,
-              mainAxisExtent: mainAxisExtent,
-            ),
-            itemBuilder: itemBuilder!,
+            gridDelegate: gridDelegate,
             itemCount: itemCount,
+            itemBuilder: itemBuilder!,
             padding: padding,
             shrinkWrap: shrinkWrap,
             physics: physics,
@@ -111,10 +111,10 @@ class NResponsiveGrid extends StatelessWidget {
           );
         }
 
-        return NGrid(
-          columns: columns,
-          gap: gap,
-          rowGap: rowGap,
+        return GridView.count(
+          crossAxisCount: columns,
+          crossAxisSpacing: gap,
+          mainAxisSpacing: rowGap ?? gap,
           padding: padding,
           childAspectRatio: childAspectRatio,
           mainAxisExtent: mainAxisExtent,
