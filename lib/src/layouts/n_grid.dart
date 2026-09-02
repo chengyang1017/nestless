@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+class NGrid extends StatelessWidget {
+  final List<Widget> children;
+  final int columns;
+  final double gap;
+  final double? rowGap;
+  final EdgeInsetsGeometry? padding;
+  final double childAspectRatio;
+  final double? mainAxisExtent;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
+  final ScrollController? controller;
+  final bool primary;
+  final bool reverse;
+
+  const NGrid({
+    super.key,
+    required this.children,
+    required this.columns,
+    this.gap = 0,
+    this.rowGap,
+    this.padding,
+    this.childAspectRatio = 1,
+    this.mainAxisExtent,
+    this.shrinkWrap = false,
+    this.physics,
+    this.controller,
+    this.primary = false,
+    this.reverse = false,
+  }) : assert(columns > 0, 'columns must be greater than 0'),
+       assert(gap >= 0, 'gap must not be negative'),
+       assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
+       assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: columns,
+      crossAxisSpacing: gap,
+      mainAxisSpacing: rowGap ?? gap,
+      padding: padding,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+      shrinkWrap: shrinkWrap,
+      physics: physics,
+      controller: controller,
+      primary: primary,
+      reverse: reverse,
+      children: children,
+    );
+  }
+}
+
+extension NestlessGridExtensions on Iterable<Widget> {
+  Widget nGrid({
+    required int columns,
+    double gap = 0,
+    double? rowGap,
+    EdgeInsetsGeometry? padding,
+    double childAspectRatio = 1,
+    double? mainAxisExtent,
+    bool shrinkWrap = false,
+    ScrollPhysics? physics,
+    ScrollController? controller,
+    bool primary = false,
+    bool reverse = false,
+  }) {
+    return NGrid(
+      columns: columns,
+      gap: gap,
+      rowGap: rowGap,
+      padding: padding,
+      childAspectRatio: childAspectRatio,
+      mainAxisExtent: mainAxisExtent,
+      shrinkWrap: shrinkWrap,
+      physics: physics,
+      controller: controller,
+      primary: primary,
+      reverse: reverse,
+      children: toList(growable: false),
+    );
+  }
+}
