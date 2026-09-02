@@ -103,6 +103,25 @@ NBox(
 );
 ```
 
+```dart
+NGrid(
+  columns: 3,
+  gap: 12,
+  rowGap: 16,
+  childAspectRatio: 1.2,
+  children: cards,
+);
+```
+
+An iterable can use the same grid layout through the extension API:
+
+```dart
+cards.nGrid(
+  columns: 3,
+  gap: 12,
+);
+```
+
 ## Short modifier chains
 
 Use modifiers for one to three simple wrappers:
