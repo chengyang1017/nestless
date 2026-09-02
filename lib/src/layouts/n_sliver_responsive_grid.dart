@@ -37,8 +37,8 @@ class NSliverResponsiveGrid extends StatelessWidget {
 
   const NSliverResponsiveGrid.builder({
     super.key,
-    required NullableIndexedWidgetBuilder itemBuilder,
     required int itemCount,
+    required NullableIndexedWidgetBuilder itemBuilder,
     required this.minItemWidth,
     this.maxColumns,
     this.gap = 0,
@@ -80,13 +80,13 @@ class NSliverResponsiveGrid extends StatelessWidget {
         if (itemBuilder != null) {
           return NSliverGrid.builder(
             columns: columns,
+            itemCount: itemCount!,
+            itemBuilder: itemBuilder!,
             gap: gap,
             rowGap: rowGap,
             padding: padding,
             childAspectRatio: childAspectRatio,
             mainAxisExtent: mainAxisExtent,
-            itemBuilder: itemBuilder!,
-            itemCount: itemCount!,
           );
         }
 
