@@ -76,4 +76,56 @@ void main() {
     expect(find.text('B'), findsOneWidget);
     expect(find.byType(SliverList), findsOneWidget);
   });
+
+  testWidgets('builder creates items lazily with gaps', (tester) async {
+    var buildCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            height: 200,
+            child: CustomScrollView(
+              slivers: [
+                NSliverColumn.builder(
+                  itemCount: 100,
+                  gap: 8,
+                  itemBuilder: (context, index) {
+                    buildCount++;
+                    return SizedBox(
+                      height: 60,
+                      child: Text('Item $index'),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Item 0'), findsOneWidget);
+    expect(find.byType(SliverList), findsOneWidget);
+    expect(buildCount, lessThan(100));
+  });
+
+  testWidgets('builder supports padding', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CustomScrollView(
+          slivers: [
+            NSliverColumn.builder(
+              itemCount: 2,
+              padding: const EdgeInsets.all(16),
+              itemBuilder: (context, index) => Text('Item $index'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(find.byType(SliverPadding), findsOneWidget);
+    expect(find.text('Item 0'), findsOneWidget);
+  });
 }
