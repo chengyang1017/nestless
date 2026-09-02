@@ -285,6 +285,8 @@ const Text('Premium').nBox(
 Use `NResponsiveGrid` when Nestless adds behavior that Flutter does not expose
 as one direct widget: deriving the column count from the available width.
 
+For a small, already-built set of widgets:
+
 ```dart
 NResponsiveGrid(
   minItemWidth: 220,
@@ -306,6 +308,42 @@ cards.nResponsiveGrid(
   gap: 16,
 );
 ```
+
+For a large or dynamic dataset, use the lazy builder form:
+
+```dart
+NResponsiveGrid.builder(
+  minItemWidth: 220,
+  maxColumns: 5,
+  itemCount: products.length,
+  gap: 16,
+  rowGap: 16,
+  padding: const EdgeInsets.all(16),
+  itemBuilder: (context, index) {
+    final product = products[index];
+
+    return Card(
+      child: Column(
+        children: [
+          Expanded(
+            child: Image.network(
+              product.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Text(product.name),
+          ),
+        ],
+      ),
+    );
+  },
+);
+```
+
+`NResponsiveGrid.builder` uses the same available-width calculation as the
+normal constructor, then renders items with Flutter's `GridView.builder`.
 
 ## Sliver layouts
 
@@ -548,6 +586,6 @@ sliver composition.
 - Keep modifier chains short.
 - Preserve normal Flutter Inspector and DevTools output.
 - Keep dedicated `N...` widgets only when they add meaningful higher-level behavior.
-- Use builder delegates for large sliver datasets instead of eagerly constructing widget lists.
+- Use builder APIs for large dynamic grids and sliver datasets instead of eagerly constructing widget lists.
 - Avoid one giant widget with dozens of unrelated flags.
 - Mix Nestless and ordinary Flutter widgets freely.
