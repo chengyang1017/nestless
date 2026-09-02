@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -34,8 +36,7 @@ class NResponsiveGrid extends StatelessWidget {
     this.controller,
     this.primary = false,
     this.reverse = false,
-  })  : // ignore: prefer_initializing_formals
-        children = children,
+  })  : children = children,
         itemBuilder = null,
         itemCount = null,
         assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
@@ -61,7 +62,6 @@ class NResponsiveGrid extends StatelessWidget {
     this.primary = false,
     this.reverse = false,
   })  : children = null,
-        // ignore: prefer_initializing_formals
         itemBuilder = itemBuilder,
         itemCount = itemCount,
         assert(itemCount >= 0, 'itemCount must not be negative'),
