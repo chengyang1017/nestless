@@ -51,3 +51,34 @@ class NStack extends StatelessWidget {
     );
   }
 }
+
+extension NestlessStackExtensions on Iterable<Widget> {
+  Widget nStack({
+    double? width,
+    double? height,
+    BoxConstraints? constraints,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
+    Decoration? decoration,
+    AlignmentGeometry alignment = AlignmentDirectional.topStart,
+    StackFit fit = StackFit.loose,
+    TextDirection? textDirection,
+    Clip clipBehavior = Clip.hardEdge,
+  }) {
+    return Stack(
+      alignment: alignment,
+      fit: fit,
+      textDirection: textDirection,
+      clipBehavior: clipBehavior,
+      children: toList(growable: false),
+    ).nBox(
+      width: width,
+      height: height,
+      constraints: constraints,
+      padding: padding,
+      margin: margin,
+      decoration: decoration,
+      clipBehavior: clipBehavior,
+    );
+  }
+}
