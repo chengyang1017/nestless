@@ -21,7 +21,7 @@ class NResponsiveGrid extends StatelessWidget {
 
   const NResponsiveGrid({
     super.key,
-    required List<Widget> children,
+    required this.children,
     required this.minItemWidth,
     this.maxColumns,
     this.gap = 0,
@@ -34,8 +34,7 @@ class NResponsiveGrid extends StatelessWidget {
     this.controller,
     this.primary = false,
     this.reverse = false,
-  })  : children = children,
-        itemBuilder = null,
+  })  : itemBuilder = null,
         itemCount = null,
         assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
         assert(maxColumns == null || maxColumns > 0, 'maxColumns must be greater than 0'),
@@ -45,8 +44,8 @@ class NResponsiveGrid extends StatelessWidget {
 
   const NResponsiveGrid.builder({
     super.key,
-    required int itemCount,
-    required NullableIndexedWidgetBuilder itemBuilder,
+    required this.itemCount,
+    required this.itemBuilder,
     required this.minItemWidth,
     this.maxColumns,
     this.gap = 0,
@@ -60,9 +59,7 @@ class NResponsiveGrid extends StatelessWidget {
     this.primary = false,
     this.reverse = false,
   })  : children = null,
-        itemBuilder = itemBuilder,
-        itemCount = itemCount,
-        assert(itemCount >= 0, 'itemCount must not be negative'),
+        assert(itemCount != null && itemCount >= 0, 'itemCount must not be negative'),
         assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
         assert(maxColumns == null || maxColumns > 0, 'maxColumns must be greater than 0'),
         assert(gap >= 0, 'gap must not be negative'),
