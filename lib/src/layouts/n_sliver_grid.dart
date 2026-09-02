@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:flutter/widgets.dart';
 
 class NSliverGrid extends StatelessWidget {
@@ -20,8 +22,7 @@ class NSliverGrid extends StatelessWidget {
     this.padding,
     this.childAspectRatio = 1,
     this.mainAxisExtent,
-  })  : // ignore: prefer_initializing_formals
-        children = children,
+  })  : children = children,
         itemBuilder = null,
         itemCount = null,
         assert(columns > 0, 'columns must be greater than 0'),
@@ -40,7 +41,6 @@ class NSliverGrid extends StatelessWidget {
     this.childAspectRatio = 1,
     this.mainAxisExtent,
   })  : children = null,
-        // ignore: prefer_initializing_formals
         itemBuilder = itemBuilder,
         itemCount = itemCount,
         assert(itemCount >= 0, 'itemCount must not be negative'),
