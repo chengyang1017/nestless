@@ -63,7 +63,6 @@ class NWrap extends StatelessWidget {
       padding: padding,
       margin: margin,
       decoration: decoration,
-      clipBehavior: clipBehavior,
     );
   }
 }
@@ -104,7 +103,6 @@ extension NestlessWrapExtensions on Iterable<Widget> {
       padding: padding,
       margin: margin,
       decoration: decoration,
-      clipBehavior: clipBehavior,
     );
   }
 }
