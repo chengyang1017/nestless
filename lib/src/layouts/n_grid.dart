@@ -66,10 +66,15 @@ extension NestlessGridExtensions on Iterable<Widget> {
     bool primary = false,
     bool reverse = false,
   }) {
-    return NGrid(
-      columns: columns,
-      gap: gap,
-      rowGap: rowGap,
+    assert(columns > 0, 'columns must be greater than 0');
+    assert(gap >= 0, 'gap must not be negative');
+    assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative');
+    assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+
+    return GridView.count(
+      crossAxisCount: columns,
+      crossAxisSpacing: gap,
+      mainAxisSpacing: rowGap ?? gap,
       padding: padding,
       childAspectRatio: childAspectRatio,
       mainAxisExtent: mainAxisExtent,
