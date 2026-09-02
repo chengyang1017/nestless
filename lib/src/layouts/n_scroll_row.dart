@@ -46,17 +46,17 @@ class NScrollRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NRow(
-      constraints: constraints,
-      margin: margin,
-      alignment: alignment,
-      decoration: decoration,
-      gap: gap,
-      mainAxisAlignment: mainAxisAlignment,
-      mainAxisSize: mainAxisSize,
-      crossAxisAlignment: crossAxisAlignment,
-      children: children,
-    )
+    return children
+        .nRow(
+          gap: gap,
+          constraints: constraints,
+          margin: margin,
+          alignment: alignment,
+          decoration: decoration,
+          mainAxisAlignment: mainAxisAlignment,
+          mainAxisSize: mainAxisSize,
+          crossAxisAlignment: crossAxisAlignment,
+        )
         .nScrollX(
           controller: controller,
           physics: physics,
@@ -70,72 +70,3 @@ class NScrollRow extends StatelessWidget {
         );
   }
 }
-// import 'package:flutter/material.dart';
-
-// import 'n_row.dart';
-
-// class NScrollRow extends StatelessWidget {
-//   final List<Widget> children;
-//   final double gap;
-//   final double? width;
-//   final double? height;
-//   final BoxConstraints? constraints;
-//   final EdgeInsetsGeometry padding;
-//   final EdgeInsetsGeometry? margin;
-//   final AlignmentGeometry? alignment;
-//   final Decoration? decoration;
-//   final MainAxisAlignment mainAxisAlignment;
-//   final MainAxisSize mainAxisSize;
-//   final CrossAxisAlignment crossAxisAlignment;
-//   final ScrollController? controller;
-//   final ScrollPhysics? physics;
-//   final bool reverse;
-//   final Clip clipBehavior;
-
-//   const NScrollRow({
-//     super.key,
-//     required this.children,
-//     this.gap = 0,
-//     this.width,
-//     this.height,
-//     this.constraints,
-//     this.padding = EdgeInsets.zero,
-//     this.margin,
-//     this.alignment,
-//     this.decoration,
-//     this.mainAxisAlignment = MainAxisAlignment.start,
-//     this.mainAxisSize = MainAxisSize.min,
-//     this.crossAxisAlignment = CrossAxisAlignment.center,
-//     this.controller,
-//     this.physics,
-//     this.reverse = false,
-//     this.clipBehavior = Clip.hardEdge,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: width,
-//       height: height,
-//       child: SingleChildScrollView(
-//         controller: controller,
-//         physics: physics,
-//         reverse: reverse,
-//         padding: padding,
-//         clipBehavior: clipBehavior,
-//         scrollDirection: Axis.horizontal,
-//         child: NRow(
-//           constraints: constraints,
-//           margin: margin,
-//           alignment: alignment,
-//           decoration: decoration,
-//           gap: gap,
-//           mainAxisAlignment: mainAxisAlignment,
-//           mainAxisSize: mainAxisSize,
-//           crossAxisAlignment: crossAxisAlignment,
-//           children: children,
-//         ),
-//       ),
-//     );
-//   }
-// }
