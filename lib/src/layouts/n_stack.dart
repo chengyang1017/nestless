@@ -47,7 +47,6 @@ class NStack extends StatelessWidget {
       padding: padding,
       margin: margin,
       decoration: decoration,
-      clipBehavior: clipBehavior,
     );
   }
 }
@@ -78,7 +77,6 @@ extension NestlessStackExtensions on Iterable<Widget> {
       padding: padding,
       margin: margin,
       decoration: decoration,
-      clipBehavior: clipBehavior,
     );
   }
 }
