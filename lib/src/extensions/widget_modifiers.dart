@@ -6,6 +6,10 @@ extension NestlessWidgetModifiers on Widget {
   Widget nHeight(double height) => SizedBox(height: height, child: this);
 
   Widget nSize({double? width, double? height}) {
+    if (width == null && height == null) {
+      return this;
+    }
+
     return SizedBox(width: width, height: height, child: this);
   }
 
@@ -14,10 +18,23 @@ extension NestlessWidgetModifiers on Widget {
   }
 
   Widget nPadAll(double value) {
+    assert(value >= 0, 'padding must not be negative');
+
+    if (value == 0) {
+      return this;
+    }
+
     return Padding(padding: EdgeInsets.all(value), child: this);
   }
 
   Widget nPadSymmetric({double horizontal = 0, double vertical = 0}) {
+    assert(horizontal >= 0, 'horizontal padding must not be negative');
+    assert(vertical >= 0, 'vertical padding must not be negative');
+
+    if (horizontal == 0 && vertical == 0) {
+      return this;
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: horizontal,
@@ -33,6 +50,15 @@ extension NestlessWidgetModifiers on Widget {
     double right = 0,
     double bottom = 0,
   }) {
+    assert(left >= 0, 'left padding must not be negative');
+    assert(top >= 0, 'top padding must not be negative');
+    assert(right >= 0, 'right padding must not be negative');
+    assert(bottom >= 0, 'bottom padding must not be negative');
+
+    if (left == 0 && top == 0 && right == 0 && bottom == 0) {
+      return this;
+    }
+
     return Padding(
       padding: EdgeInsets.only(
         left: left,
@@ -91,9 +117,13 @@ extension NestlessWidgetModifiers on Widget {
     );
   }
 
-  Widget nExpanded({int flex = 1}) => Expanded(flex: flex, child: this);
+  Widget nExpanded({int flex = 1}) {
+    assert(flex > 0, 'flex must be greater than 0');
+    return Expanded(flex: flex, child: this);
+  }
 
   Widget nFlexible({int flex = 1, FlexFit fit = FlexFit.loose}) {
+    assert(flex > 0, 'flex must be greater than 0');
     return Flexible(flex: flex, fit: fit, child: this);
   }
 
@@ -171,6 +201,8 @@ extension NestlessWidgetModifiers on Widget {
   }) {
     if (maxWidth == null) return this;
 
+    assert(maxWidth >= 0, 'maxWidth must not be negative');
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: maxWidth,
@@ -228,14 +260,13 @@ extension NestlessWidgetModifiers on Widget {
   }) {
     if (!enabled) return this;
 
-    return SafeArea(
+    return nSafeArea(
       left: left,
       top: top,
       right: right,
       bottom: bottom,
       minimum: minimum,
       maintainBottomViewPadding: maintainBottomViewPadding,
-      child: this,
     );
   }
 
@@ -273,6 +304,12 @@ extension NestlessWidgetModifiers on Widget {
     double opacity, {
     bool alwaysIncludeSemantics = false,
   }) {
+    assert(opacity >= 0 && opacity <= 1, 'opacity must be between 0 and 1');
+
+    if (opacity == 1 && !alwaysIncludeSemantics) {
+      return this;
+    }
+
     return Opacity(
       opacity: opacity,
       alwaysIncludeSemantics: alwaysIncludeSemantics,
@@ -281,6 +318,8 @@ extension NestlessWidgetModifiers on Widget {
   }
 
   Widget nAspectRatio(double aspectRatio) {
+    assert(aspectRatio > 0, 'aspectRatio must be greater than 0');
+
     return AspectRatio(
       aspectRatio: aspectRatio,
       child: this,
