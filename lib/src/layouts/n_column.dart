@@ -85,8 +85,18 @@ extension NestlessColumnExtensions on Iterable<Widget> {
     TextBaseline? textBaseline,
     Clip clipBehavior = Clip.none,
   }) {
-    return NColumn(
-      gap: gap,
+    return Column(
+      mainAxisAlignment: mainAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      crossAxisAlignment: crossAxisAlignment,
+      textDirection: textDirection,
+      verticalDirection: verticalDirection,
+      textBaseline: textBaseline,
+      children: nWithGap(
+        gap,
+        axis: NGapAxis.vertical,
+      ),
+    ).nBox(
       width: width,
       height: height,
       constraints: constraints,
@@ -94,14 +104,7 @@ extension NestlessColumnExtensions on Iterable<Widget> {
       margin: margin,
       alignment: alignment,
       decoration: decoration,
-      mainAxisAlignment: mainAxisAlignment,
-      mainAxisSize: mainAxisSize,
-      crossAxisAlignment: crossAxisAlignment,
-      textDirection: textDirection,
-      verticalDirection: verticalDirection,
-      textBaseline: textBaseline,
       clipBehavior: clipBehavior,
-      children: toList(growable: false),
     );
   }
 }
