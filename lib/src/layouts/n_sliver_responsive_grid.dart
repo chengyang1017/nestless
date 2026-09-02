@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'n_sliver_grid.dart';
 
 class NSliverResponsiveGrid extends StatelessWidget {
-  final List<Widget> children;
+  final List<Widget>? children;
+  final NullableIndexedWidgetBuilder? itemBuilder;
+  final int? itemCount;
   final double minItemWidth;
   final int? maxColumns;
   final double gap;
@@ -16,7 +18,7 @@ class NSliverResponsiveGrid extends StatelessWidget {
 
   const NSliverResponsiveGrid({
     super.key,
-    required this.children,
+    required List<Widget> children,
     required this.minItemWidth,
     this.maxColumns,
     this.gap = 0,
@@ -24,11 +26,35 @@ class NSliverResponsiveGrid extends StatelessWidget {
     this.padding,
     this.childAspectRatio = 1,
     this.mainAxisExtent,
-  }) : assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
-       assert(maxColumns == null || maxColumns > 0, 'maxColumns must be greater than 0'),
-       assert(gap >= 0, 'gap must not be negative'),
-       assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
-       assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+  })  : children = children,
+        itemBuilder = null,
+        itemCount = null,
+        assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
+        assert(maxColumns == null || maxColumns > 0, 'maxColumns must be greater than 0'),
+        assert(gap >= 0, 'gap must not be negative'),
+        assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
+        assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
+
+  const NSliverResponsiveGrid.builder({
+    super.key,
+    required NullableIndexedWidgetBuilder itemBuilder,
+    required int itemCount,
+    required this.minItemWidth,
+    this.maxColumns,
+    this.gap = 0,
+    this.rowGap,
+    this.padding,
+    this.childAspectRatio = 1,
+    this.mainAxisExtent,
+  })  : children = null,
+        itemBuilder = itemBuilder,
+        itemCount = itemCount,
+        assert(itemCount >= 0, 'itemCount must not be negative'),
+        assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
+        assert(maxColumns == null || maxColumns > 0, 'maxColumns must be greater than 0'),
+        assert(gap >= 0, 'gap must not be negative'),
+        assert(rowGap == null || rowGap >= 0, 'rowGap must not be negative'),
+        assert(childAspectRatio > 0, 'childAspectRatio must be greater than 0');
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +77,19 @@ class NSliverResponsiveGrid extends StatelessWidget {
           columns = math.min(columns, maxColumns!);
         }
 
+        if (itemBuilder != null) {
+          return NSliverGrid.builder(
+            columns: columns,
+            gap: gap,
+            rowGap: rowGap,
+            padding: padding,
+            childAspectRatio: childAspectRatio,
+            mainAxisExtent: mainAxisExtent,
+            itemBuilder: itemBuilder!,
+            itemCount: itemCount!,
+          );
+        }
+
         return NSliverGrid(
           columns: columns,
           gap: gap,
@@ -58,7 +97,7 @@ class NSliverResponsiveGrid extends StatelessWidget {
           padding: padding,
           childAspectRatio: childAspectRatio,
           mainAxisExtent: mainAxisExtent,
-          children: children,
+          children: children!,
         );
       },
     );
