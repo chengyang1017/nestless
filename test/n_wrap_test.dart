@@ -51,4 +51,21 @@ void main() {
     expect(wrap.runAlignment, WrapAlignment.end);
     expect(wrap.crossAxisAlignment, WrapCrossAlignment.center);
   });
+
+  testWidgets('nWrap keeps clipping on Wrap without adding Container', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: <Widget>[
+            const Text('A'),
+            const Text('B'),
+          ].nWrap(clipBehavior: Clip.hardEdge),
+        ),
+      ),
+    );
+
+    final wrap = tester.widget<Wrap>(find.byType(Wrap));
+    expect(wrap.clipBehavior, Clip.hardEdge);
+    expect(find.byType(Container), findsNothing);
+  });
 }
