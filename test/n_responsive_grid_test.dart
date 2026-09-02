@@ -23,6 +23,9 @@ void main() {
       ),
     );
 
+    expect(find.byType(NGrid), findsNothing);
+    expect(find.byType(GridView), findsOneWidget);
+
     final grid = tester.widget<GridView>(find.byType(GridView));
     final delegate = grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
 
