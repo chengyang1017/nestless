@@ -26,7 +26,8 @@ class NSliverResponsiveGrid extends StatelessWidget {
     this.padding,
     this.childAspectRatio = 1,
     this.mainAxisExtent,
-  })  : children = children,
+  })  : // ignore: prefer_initializing_formals
+        children = children,
         itemBuilder = null,
         itemCount = null,
         assert(minItemWidth > 0, 'minItemWidth must be greater than 0'),
@@ -47,6 +48,7 @@ class NSliverResponsiveGrid extends StatelessWidget {
     this.childAspectRatio = 1,
     this.mainAxisExtent,
   })  : children = null,
+        // ignore: prefer_initializing_formals
         itemBuilder = itemBuilder,
         itemCount = itemCount,
         assert(itemCount >= 0, 'itemCount must not be negative'),
