@@ -21,8 +21,8 @@ class NSliverColumn extends StatelessWidget {
 
   const NSliverColumn.builder({
     super.key,
-    required NullableIndexedWidgetBuilder itemBuilder,
     required int itemCount,
+    required NullableIndexedWidgetBuilder itemBuilder,
     this.gap = 0,
     this.padding,
   })  : children = null,
