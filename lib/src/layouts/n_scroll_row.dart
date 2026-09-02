@@ -42,7 +42,7 @@ class NScrollRow extends StatelessWidget {
     this.physics,
     this.reverse = false,
     this.clipBehavior = Clip.hardEdge,
-  });
+  }) : assert(gap >= 0, 'gap must not be negative');
 
   @override
   Widget build(BuildContext context) {
