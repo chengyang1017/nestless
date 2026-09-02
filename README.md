@@ -412,7 +412,7 @@ CustomScrollView(
 );
 ```
 
-For a responsive sliver grid:
+For a small responsive sliver grid:
 
 ```dart
 CustomScrollView(
@@ -426,6 +426,48 @@ CustomScrollView(
   ],
 );
 ```
+
+For a large responsive grid, combine automatic column calculation with lazy
+item construction:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverResponsiveGrid.builder(
+      minItemWidth: 220,
+      maxColumns: 5,
+      itemCount: products.length,
+      gap: 16,
+      rowGap: 16,
+      padding: const EdgeInsets.all(16),
+      itemBuilder: (context, index) {
+        final product = products[index];
+
+        return Card(
+          child: Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  product.imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(product.name),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  ],
+);
+```
+
+`NSliverResponsiveGrid.builder` uses the same viewport-width calculation as the
+normal responsive grid, then forwards the item builder to a lazy
+`SliverChildBuilderDelegate`.
 
 ## Responsive layout switching
 
