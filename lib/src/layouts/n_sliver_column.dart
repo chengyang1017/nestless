@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:flutter/widgets.dart';
 
 import '../extensions/widget_list_extensions.dart';
@@ -14,8 +16,7 @@ class NSliverColumn extends StatelessWidget {
     required List<Widget> children,
     this.gap = 0,
     this.padding,
-  })  : // ignore: prefer_initializing_formals
-        children = children,
+  })  : children = children,
         itemBuilder = null,
         itemCount = null,
         assert(gap >= 0, 'gap must not be negative');
@@ -27,7 +28,6 @@ class NSliverColumn extends StatelessWidget {
     this.gap = 0,
     this.padding,
   })  : children = null,
-        // ignore: prefer_initializing_formals
         itemBuilder = itemBuilder,
         itemCount = itemCount,
         assert(itemCount >= 0, 'itemCount must not be negative'),
