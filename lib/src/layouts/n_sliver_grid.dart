@@ -30,8 +30,8 @@ class NSliverGrid extends StatelessWidget {
 
   const NSliverGrid.builder({
     super.key,
-    required NullableIndexedWidgetBuilder itemBuilder,
     required int itemCount,
+    required NullableIndexedWidgetBuilder itemBuilder,
     required this.columns,
     this.gap = 0,
     this.rowGap,
