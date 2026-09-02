@@ -36,7 +36,7 @@ void main() {
     expect(find.byType(SizedBox), findsNothing);
   });
 
-  testWidgets('nColumn builds NColumn from widget iterable', (tester) async {
+  testWidgets('nColumn composes Flutter widgets directly', (tester) async {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
@@ -50,7 +50,7 @@ void main() {
       ),
     );
 
-    expect(find.byType(NColumn), findsOneWidget);
+    expect(find.byType(NColumn), findsNothing);
     expect(find.byType(Column), findsOneWidget);
     expect(find.byType(SizedBox), findsNWidgets(2));
 
