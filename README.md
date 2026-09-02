@@ -312,6 +312,8 @@ cards.nResponsiveGrid(
 Use Nestless sliver helpers when the combination itself removes substantial
 Flutter sliver boilerplate.
 
+For a small, already-built list of widgets:
+
 ```dart
 CustomScrollView(
   slivers: [
@@ -330,7 +332,36 @@ CustomScrollView(
 );
 ```
 
-For a fixed-column sliver grid:
+For a long or dynamic list, use the lazy builder form so only visible items are
+built:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverColumn.builder(
+      itemCount: messages.length,
+      gap: 12,
+      padding: const EdgeInsets.all(16),
+      itemBuilder: (context, index) {
+        final message = messages[index];
+
+        return ListTile(
+          leading: CircleAvatar(
+            child: Text(message.authorInitial),
+          ),
+          title: Text(message.authorName),
+          subtitle: Text(message.text),
+        );
+      },
+    ),
+  ],
+);
+```
+
+`NSliverColumn.builder` uses Flutter's `SliverChildBuilderDelegate`. Gaps are
+also created lazily instead of expanding the full list before layout.
+
+For a small fixed-column sliver grid:
 
 ```dart
 CustomScrollView(
@@ -340,6 +371,42 @@ CustomScrollView(
       gap: 12,
       rowGap: 16,
       padding: const EdgeInsets.all(16),
+    ),
+  ],
+);
+```
+
+For a large fixed-column grid, use the builder form:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverGrid.builder(
+      columns: 3,
+      itemCount: products.length,
+      gap: 12,
+      rowGap: 16,
+      padding: const EdgeInsets.all(16),
+      itemBuilder: (context, index) {
+        final product = products[index];
+
+        return Card(
+          child: Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  product.imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(product.name),
+              ),
+            ],
+          ),
+        );
+      },
     ),
   ],
 );
@@ -429,7 +496,8 @@ Widget           -> nBox()    -> Container
 ```
 
 Keep dedicated Nestless widgets for behavior that adds a higher-level concept,
-such as responsive layout switching or responsive column calculation.
+such as responsive layout switching, responsive column calculation, or lazy
+sliver composition.
 
 ## Design rules
 
@@ -438,5 +506,6 @@ such as responsive layout switching or responsive column calculation.
 - Keep modifier chains short.
 - Preserve normal Flutter Inspector and DevTools output.
 - Keep dedicated `N...` widgets only when they add meaningful higher-level behavior.
+- Use builder delegates for large sliver datasets instead of eagerly constructing widget lists.
 - Avoid one giant widget with dozens of unrelated flags.
 - Mix Nestless and ordinary Flutter widgets freely.
