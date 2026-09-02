@@ -45,4 +45,23 @@ void main() {
     expect(stack.fit, StackFit.expand);
     expect(stack.clipBehavior, Clip.none);
   });
+
+  testWidgets('nStack does not create a Container only for Stack clipping', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: <Widget>[
+            const Text('A'),
+            const Text('B'),
+          ].nStack(),
+        ),
+      ),
+    );
+
+    final stack = tester.widget<Stack>(find.byType(Stack));
+    expect(stack.clipBehavior, Clip.hardEdge);
+    expect(find.byType(Container), findsNothing);
+  });
 }
