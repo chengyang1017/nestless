@@ -2,31 +2,40 @@
 
 Keep common Flutter UI code shallow and readable.
 
-`nestless_flutter` does not replace Flutter's Widget tree. It keeps the same
-runtime widgets while reducing wrapper-heavy source code.
+`nestless_flutter` does not replace Flutter's Widget tree. Its preferred API
+adds concise composition helpers around normal Flutter widgets so the runtime
+tree remains familiar in Flutter Inspector and DevTools.
 
 ## Goal
 
 Most common `build()` methods should stay within roughly one to three visible
-nesting levels.
+nesting levels while still producing standard Flutter widgets.
 
 ## Before
 
 ```dart
 return SizedBox(
   width: 480,
-  child: SingleChildScrollView(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          title,
-          const SizedBox(height: 12),
-          content,
-          const SizedBox(height: 12),
-          button,
-        ],
-      ),
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 12),
+        const Text('This is the profile description.'),
+        const SizedBox(height: 12),
+        FilledButton(
+          onPressed: save,
+          child: const Text('Save'),
+        ),
+      ],
     ),
   ),
 );
@@ -35,17 +44,30 @@ return SizedBox(
 ## After
 
 ```dart
-return NScrollColumn(
-  width: 480,
-  padding: const EdgeInsets.all(16),
-  gap: 12,
-  children: [
-    title,
-    content,
-    button,
-  ],
-);
+return [
+  const Text(
+    'Profile',
+    style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  const Text('This is the profile description.'),
+  FilledButton(
+    onPressed: save,
+    child: const Text('Save'),
+  ),
+]
+    .nColumn(
+      gap: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    )
+    .nPadAll(16)
+    .nWidth(480);
 ```
+
+The extension form above directly creates Flutter's `Column`, `Padding`, and
+`SizedBox`. It does not add an `NColumn` wrapper to the runtime tree.
 
 ## Local installation
 
@@ -61,80 +83,91 @@ dependencies:
 import 'package:nestless_flutter/nestless_flutter.dart';
 ```
 
-## Layouts
+## Extension-first layouts
+
+Use iterable extensions when Flutter already has the underlying layout widget.
+
+### Column
 
 ```dart
-NColumn(
-  gap: 16,
-  children: [
-    const Text('Title'),
-    TextField(controller: controller),
-    FilledButton(
-      onPressed: save,
-      child: const Text('Save'),
-    ),
-  ],
-);
-```
-
-```dart
-NRow(
-  gap: 12,
-  children: [
-    const CircleAvatar(),
-    const Text('Username').nExpanded(),
-    IconButton(
-      onPressed: openMenu,
-      icon: const Icon(Icons.more_vert),
-    ),
-  ],
-);
-```
-
-```dart
-NBox(
-  width: 320,
-  padding: const EdgeInsets.all(16),
-  alignment: Alignment.center,
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(16),
+[
+  const Text('Account'),
+  const Text('lim@example.com'),
+  FilledButton(
+    onPressed: save,
+    child: const Text('Save'),
   ),
-  child: content,
-);
+]
+    .nColumn(
+      gap: 16,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    )
+    .nPadAll(16)
+    .nWidth(480);
 ```
 
+`nColumn()` directly returns Flutter's `Column` plus any requested normal
+Flutter wrappers.
+
+### Row
+
 ```dart
-NGrid(
-  columns: 3,
+[
+  const CircleAvatar(
+    child: Text('L'),
+  ),
+  const Text('Lim Cheng Yang').nExpanded(),
+  IconButton(
+    onPressed: openMenu,
+    icon: const Icon(Icons.more_vert),
+  ),
+]
+    .nRow(gap: 12)
+    .nPadSymmetric(horizontal: 16, vertical: 8);
+```
+
+`nRow()` directly returns Flutter's `Row`.
+
+### Grid
+
+```dart
+[
+  const Card(child: Center(child: Text('A'))),
+  const Card(child: Center(child: Text('B'))),
+  const Card(child: Center(child: Text('C'))),
+  const Card(child: Center(child: Text('D'))),
+].nGrid(
+  columns: 2,
   gap: 12,
   rowGap: 16,
   childAspectRatio: 1.2,
-  children: cards,
 );
 ```
 
-An iterable can use the same grid layout through the extension API:
+`nGrid()` directly returns Flutter's `GridView`.
 
-```dart
-cards.nGrid(
-  columns: 3,
-  gap: 12,
-);
-```
+The `NColumn`, `NRow`, and `NGrid` widget classes remain available for
+compatibility, but new code should prefer the extension-first form.
 
-For responsive grids, provide a minimum item width instead of breakpoints:
+## Responsive grid
+
+Use `NResponsiveGrid` when Nestless adds behavior that Flutter does not expose
+as one direct widget: deriving the column count from the available width.
 
 ```dart
 NResponsiveGrid(
   minItemWidth: 220,
   maxColumns: 5,
   gap: 16,
-  children: cards,
+  children: const [
+    Card(child: Center(child: Text('A'))),
+    Card(child: Center(child: Text('B'))),
+    Card(child: Center(child: Text('C'))),
+  ],
 );
 ```
 
-The number of columns is derived from the available width. The same API is
-available on iterables:
+The iterable API is available too:
 
 ```dart
 cards.nResponsiveGrid(
@@ -145,32 +178,20 @@ cards.nResponsiveGrid(
 
 ## Sliver layouts
 
-Use `NSliverColumn` directly inside `CustomScrollView.slivers` when the page
-needs normal Flutter sliver behavior without the usual `SliverPadding` and
-`SliverChildListDelegate` boilerplate:
+Use Nestless sliver helpers when the combination itself removes substantial
+Flutter sliver boilerplate.
 
 ```dart
 CustomScrollView(
   slivers: [
-    NSliverColumn(
-      gap: 12,
-      padding: const EdgeInsets.all(16),
-      children: [
-        title,
-        content,
-        button,
-      ],
-    ),
-  ],
-);
-```
-
-The iterable extension is available too:
-
-```dart
-CustomScrollView(
-  slivers: [
-    children.nSliverColumn(
+    [
+      const Text('Overview'),
+      const Text('Recent activity'),
+      FilledButton(
+        onPressed: refresh,
+        child: const Text('Refresh'),
+      ),
+    ].nSliverColumn(
       gap: 12,
       padding: const EdgeInsets.all(16),
     ),
@@ -178,54 +199,33 @@ CustomScrollView(
 );
 ```
 
-Use `NSliverGrid` for fixed-column grids inside the same sliver tree:
+For a fixed-column sliver grid:
 
 ```dart
 CustomScrollView(
   slivers: [
-    NSliverGrid(
+    cards.nSliverGrid(
       columns: 3,
       gap: 12,
       rowGap: 16,
       padding: const EdgeInsets.all(16),
-      children: cards,
     ),
   ],
 );
 ```
 
-The iterable API mirrors `NGrid`:
-
-```dart
-cards.nSliverGrid(
-  columns: 3,
-  gap: 12,
-);
-```
-
-Use `NSliverResponsiveGrid` when the grid should derive its column count from
-the sliver viewport width:
+For a responsive sliver grid:
 
 ```dart
 CustomScrollView(
   slivers: [
-    NSliverResponsiveGrid(
+    cards.nSliverResponsiveGrid(
       minItemWidth: 220,
       maxColumns: 5,
       gap: 16,
       padding: const EdgeInsets.all(16),
-      children: cards,
     ),
   ],
-);
-```
-
-The iterable API is available as well:
-
-```dart
-cards.nSliverResponsiveGrid(
-  minItemWidth: 220,
-  gap: 16,
 );
 ```
 
@@ -235,9 +235,9 @@ Use `NResponsive` when the layout structure itself should change by width:
 
 ```dart
 NResponsive(
-  mobile: mobileLayout,
-  tablet: tabletLayout,
-  desktop: desktopLayout,
+  mobile: const MobilePage(),
+  tablet: const TabletPage(),
+  desktop: const DesktopPage(),
 );
 ```
 
@@ -250,9 +250,9 @@ NResponsive(
     tablet: 720,
     desktop: 1200,
   ),
-  mobile: mobileLayout,
-  tablet: tabletLayout,
-  desktop: desktopLayout,
+  mobile: const MobilePage(),
+  tablet: const TabletPage(),
+  desktop: const DesktopPage(),
 );
 ```
 
@@ -281,10 +281,27 @@ const Text('Error')
 The first method becomes the inner wrapper. The last method becomes the outer
 wrapper.
 
+## API direction
+
+Prefer extension-first APIs when Flutter already owns the concept:
+
+```text
+Iterable<Widget> -> nColumn() -> Column
+Iterable<Widget> -> nRow()    -> Row
+Iterable<Widget> -> nGrid()   -> GridView
+Widget           -> nPadAll() -> Padding
+Widget           -> nWidth()  -> SizedBox
+```
+
+Keep dedicated Nestless widgets for behavior that adds a higher-level concept,
+such as responsive layout switching or responsive column calculation.
+
 ## Design rules
 
-- Use semantic layout widgets for common combinations.
+- Prefer normal Flutter widgets as the runtime output.
+- Use extensions to reduce source-code nesting without hiding Flutter concepts.
 - Keep modifier chains short.
-- Preserve normal Flutter widgets and DevTools output.
+- Preserve normal Flutter Inspector and DevTools output.
+- Keep dedicated `N...` widgets only when they add meaningful higher-level behavior.
 - Avoid one giant widget with dozens of unrelated flags.
 - Mix Nestless and ordinary Flutter widgets freely.
