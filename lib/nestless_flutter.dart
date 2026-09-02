@@ -16,6 +16,7 @@ export 'src/layouts/n_scroll_column.dart';
 export 'src/layouts/n_scroll_row.dart';
 export 'src/layouts/n_sliver_column.dart';
 export 'src/layouts/n_sliver_grid.dart';
+export 'src/layouts/n_sliver_responsive_grid.dart';
 export 'src/layouts/n_stack.dart';
 export 'src/layouts/n_wrap.dart';
 export 'src/responsive/n_breakpoint.dart';
