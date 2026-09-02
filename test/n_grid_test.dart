@@ -40,7 +40,7 @@ void main() {
     expect(delegate.mainAxisSpacing, 20);
   });
 
-  testWidgets('nGrid extension creates NGrid from an iterable', (tester) async {
+  testWidgets('nGrid extension returns GridView directly', (tester) async {
     final children = [const Text('One'), const Text('Two')];
 
     await tester.pumpWidget(
@@ -55,7 +55,8 @@ void main() {
       ),
     );
 
-    expect(find.byType(NGrid), findsOneWidget);
+    expect(find.byType(NGrid), findsNothing);
+    expect(find.byType(GridView), findsOneWidget);
     expect(find.text('One'), findsOneWidget);
     expect(find.text('Two'), findsOneWidget);
   });
