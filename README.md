@@ -178,6 +178,31 @@ CustomScrollView(
 );
 ```
 
+Use `NSliverGrid` for fixed-column grids inside the same sliver tree:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverGrid(
+      columns: 3,
+      gap: 12,
+      rowGap: 16,
+      padding: const EdgeInsets.all(16),
+      children: cards,
+    ),
+  ],
+);
+```
+
+The iterable API mirrors `NGrid`:
+
+```dart
+cards.nSliverGrid(
+  columns: 3,
+  gap: 12,
+);
+```
+
 ## Responsive layout switching
 
 Use `NResponsive` when the layout structure itself should change by width:
