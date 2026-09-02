@@ -203,6 +203,32 @@ cards.nSliverGrid(
 );
 ```
 
+Use `NSliverResponsiveGrid` when the grid should derive its column count from
+the sliver viewport width:
+
+```dart
+CustomScrollView(
+  slivers: [
+    NSliverResponsiveGrid(
+      minItemWidth: 220,
+      maxColumns: 5,
+      gap: 16,
+      padding: const EdgeInsets.all(16),
+      children: cards,
+    ),
+  ],
+);
+```
+
+The iterable API is available as well:
+
+```dart
+cards.nSliverResponsiveGrid(
+  minItemWidth: 220,
+  gap: 16,
+);
+```
+
 ## Responsive layout switching
 
 Use `NResponsive` when the layout structure itself should change by width:
